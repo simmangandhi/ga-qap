@@ -23,6 +23,6 @@ public:
 	void setFitness(int newFitness);
 	
 
-}
+};
 
 #endif

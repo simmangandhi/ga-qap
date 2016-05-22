@@ -17,6 +17,7 @@ public:
 	Solution(int nf);
 	Solution(std::vector<int> perm);
 	std::vector<int> permutation();
+	int p(int i);
 	int n();
 	int fitness();
 	void setFitness(int newFitness);

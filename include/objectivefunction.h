@@ -13,7 +13,7 @@ public:
 	ObjectiveFunction(DataFile data);
 	int evaluate(Solution s);
 	
-}
+};
 
 #endif
 

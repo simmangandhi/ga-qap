@@ -2,11 +2,13 @@
 	
 Solution::Solution(int nf){
 	this->nf = nf;
+	this->fitnessf = 0;
 	this->permutationf.assign(nf, -1);
 }
 
 Solution::Solution(std::vector<int> perm){
 	this->nf = perm.size();
+	this->fitnessf = 0;
 	this->permutationf = perm;
 }
 
