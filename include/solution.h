@@ -17,11 +17,15 @@ public:
 	Solution(int nf);
 	Solution(std::vector<int> perm);
 	std::vector<int> permutation();
+	int& operator[](int i);
 	int p(int i);
 	int n();
 	int fitness();
 	void setFitness(int newFitness);
-	
+	bool operator<(Solution s);
+	bool operator<=(Solution s);
+	bool operator>(Solution s);
+	bool operator>=(Solution s);
 
 };
 

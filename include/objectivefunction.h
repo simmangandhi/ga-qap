@@ -11,7 +11,10 @@ private:
 	
 public:
 	ObjectiveFunction(DataFile data);
+	/*Evaluates entire solution s*/
 	int evaluate(Solution s);
+	/*Evaluates a pair exchange in solution s, where locations in s(i) and s(j) will be exchanged*/
+	int evaluatePairChange(Solution s, int i, int j);
 	
 };
 

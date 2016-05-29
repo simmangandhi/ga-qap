@@ -3,7 +3,7 @@
 
 #include <vector>
 #include <string>
-
+#include "solution.h"
 
 class DataFile {
 private:
@@ -19,7 +19,7 @@ public:
 	int flow(int i, int j);
 	int distance(int i, int j);
 	int n();
-	int writeSolution();
+	int writeSolution(std::string filename, Solution s);
 	void printOut();
 
 

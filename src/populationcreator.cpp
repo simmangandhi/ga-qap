@@ -1,10 +1,10 @@
 #include "../include/populationcreator.h"
 
 /*Constructor*/
-PopulationCreator::PopulationCreator(int popSize, int n, int seed){
+PopulationCreator::PopulationCreator(ObjectiveFunction *evaluator, int popSize, int n, int seed){
 	this->popSize = popSize;
 	this->nf = n;
-
+	this->evaluator = evaluator;
 	this->generator = std::default_random_engine(seed);
 	this->rand = std::uniform_int_distribution<int>(0, n-1);
 }
@@ -14,12 +14,12 @@ std::vector<Solution> PopulationCreator::randomPopulation(){
 	std::vector<Solution> population;
 	
 	/*While population is smaller than the parameter 'population size'*/
-	while(population.size() < this->popSize){
+	while(population.size() < (unsigned int)this->popSize){
 		std::vector<int> individual;
 		std::vector<bool> used(this->nf, false);
 		
 		/*While individual doesn't have n locations in it*/
-		while(individual.size() < this->nf){
+		while(individual.size() < (unsigned int)this->nf){
 			int r = this->rand(this->generator);
 			if(!used[r]){
 				individual.push_back(r);
@@ -28,6 +28,7 @@ std::vector<Solution> PopulationCreator::randomPopulation(){
 		}
 
 		Solution si(individual);
+		si.setFitness(this->evaluator->evaluate(si));
 		population.push_back(si);
 	}
 	

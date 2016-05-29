@@ -16,18 +16,38 @@ std::vector<int> Solution::permutation(){
 	return this->permutationf;	
 }
 
+int& Solution::operator[](int i){
+	return this->permutationf[i];
+}
+
 int Solution::p(int i){
 	return this->permutationf[i];
 }
 
-int n(){
+int Solution::n(){
 	return this->nf;
 }
 
-int fitness(){
+int Solution::fitness(){
 	return this->fitnessf;
 }
 
-void setFitness(int newFitness){
+void Solution::setFitness(int newFitness){
 	this->fitnessf = newFitness;
+}
+
+bool Solution::operator<(Solution s){
+	return this->fitness() < s.fitness();
+}
+
+bool Solution::operator<=(Solution s){
+	return this->fitness() <= s.fitness();
+}
+
+bool Solution::operator>(Solution s){
+	return this->fitness() > s.fitness();
+}
+
+bool Solution::operator>=(Solution s){
+	return this->fitness() >= s.fitness();
 }
