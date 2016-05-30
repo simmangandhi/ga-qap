@@ -22,7 +22,7 @@ SRCDIR = ./src/
 LIBS = -lm
 
 # define the C++ source files
-SRCS = $(SRCDIR)datafile.cpp $(SRCDIR)main.cpp $(SRCDIR)solution.cpp $(SRCDIR)objectivefunction.cpp $(SRCDIR)populationcreator.cpp $(SRCDIR)localsearch.cpp
+SRCS = $(SRCDIR)datafile.cpp $(SRCDIR)main.cpp $(SRCDIR)solution.cpp $(SRCDIR)objectivefunction.cpp $(SRCDIR)populationcreator.cpp $(SRCDIR)localsearch.cpp $(SRCDIR)geneticalgorithm.cpp
 
 # define the C object files 
 #

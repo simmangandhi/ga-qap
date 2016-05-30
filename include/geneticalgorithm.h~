@@ -3,6 +3,8 @@
 
 #include "datafile.h"
 #include "solution.h"
+#include <random>
+#include <vector>
 
 class GeneticAlgorithm{
 private:
@@ -18,6 +20,7 @@ private:
 	int maxgenerations;
 	/*Random operator seed*/
 	int seed;
+
 	/*Variables of the random number generator*/
 	std::default_random_engine generator;
 	std::uniform_int_distribution<int> rand_pop;
@@ -26,13 +29,13 @@ private:
 	/*Crossover operation*/
 	std::vector<int> crossover(std::vector<int> p1, std::vector<int> p2);
 	/*Tournament selection of size k, except >= 0 is a solution that can't be selected*/
-	std::vector<int> GeneticAlgorithm::tournament(std:vector<Solution> population, int k, int except=-1);
+	std::vector<int> tournament(std::vector<Solution> population, int k, int except=-1);
+
+
 public:
 	GeneticAlgorithm(DataFile data, int popsize, int maxgenerations, double pc, double pm, int seed);
 	Solution run();
 	
-	
-
 
 };
 

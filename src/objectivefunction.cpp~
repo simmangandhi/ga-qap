@@ -21,20 +21,32 @@ int ObjectiveFunction::evaluate(Solution s){
 int ObjectiveFunction::evaluatePairChange(Solution s, int i, int j){
 	int fitness = s.fitness();
 	int delta = 0;	
+	
+	delta +=  data.flow(i,j)*data.distance(s[i], s[j]);
+	delta = delta - data.flow(i,j)*data.distance(s[j], s[i]);
+	delta +=  data.flow(j,i)*data.distance(s[j], s[i]);
+	delta = delta - data.flow(j,i)*data.distance(s[i], s[j]);
+
+	delta = delta + (2*data.flow(i,i)*data.distance(s[i], s[i]));
+	delta = delta - (2*data.flow(i,i)*data.distance(s[j], s[j]));
+	delta = delta + (2*data.flow(j,j)*data.distance(s[j], s[j]));
+	delta = delta - (2*data.flow(j,j)*data.distance(s[i], s[i]));
 
 	for(int k=0;k<s.n();k++){
-		if(k == i || k==j){
-			int l = i;
-			if(k == i) l = j;
-			std::cout << "a(i,i)=" << data.flow(i,i) << std::endl;
-			std::cout << "b(o(i),o(i))=" << data.distance(s[i],s[i]) << std::endl;
-			delta -= 2*data.flow(k,k)*data.distance(s[k], s[k]);
-			delta += 2*data.flow(k,k)*data.distance(s[l], s[l]);
+		if(k == i || k==j)
 			continue;
-		}
-		delta += (data.flow(k, i)-data.flow(k, j))*(data.distance(s[k], s[i])-data.distance(s[k], s[j]));
-		delta += (data.flow(i, k)-data.flow(j, k))*(data.distance(s[i], s[k])-data.distance(s[j], s[k]));
+
+		delta = delta + data.flow(k, i)*data.distance(s[k], s[i]);
+		delta = delta - data.flow(k, i)*data.distance(s[k], s[j]);
+		delta = delta + data.flow(i, k)*data.distance(s[i], s[k]);
+		delta = delta - data.flow(i, k)*data.distance(s[j], s[k]);
+
+		delta = delta + data.flow(k, j)*data.distance(s[k], s[j]);
+		delta = delta - data.flow(k, j)*data.distance(s[k], s[i]);
+		delta = delta + data.flow(j, k)*data.distance(s[j], s[k]);
+		delta = delta - data.flow(j, k)*data.distance(s[i], s[k]);
 	}
+
 	fitness -= delta;
 	return fitness;
 }

@@ -20,12 +20,8 @@ int main(){
 	Solution s = pc.randomPopulation()[0];
 	LocalSearch ls(data, 9);
 	cout << "Initial:  " << s.fitness() << endl;
-	/*s = ls.runComplete(s);
-	cout << "Final:  " << s.fitness() << endl;*/
-	cout << "Exchange:  " << of.evaluatePairChange(s, 4, 9) << endl;
-	int t = s[4];
-	s[4] = s[9];
-	s[9] = t;
+	s = ls.runComplete(s);
+	cout << "Final:  " << s.fitness() << endl;
 	cout << "Real:  " << of.evaluate(s) << endl;
 
 	//data.printOut();

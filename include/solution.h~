@@ -23,7 +23,10 @@ public:
 	int fitness();
 	void setFitness(int newFitness);
 	bool operator<(Solution s);
+	bool operator<(Solution s1, Solution s2);
 	bool operator<=(Solution s);
+	bool operator>(Solution s);
+	bool operator>=(Solution s);
 
 };
 
