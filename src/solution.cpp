@@ -1,5 +1,5 @@
 #include "../include/solution.h"
-	
+
 Solution::Solution(int nf){
 	this->nf = nf;
 	this->fitnessf = 0;

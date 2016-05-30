@@ -3,7 +3,9 @@
 #include "../include/populationcreator.h"
 #include "../include/objectivefunction.h"
 #include "../include/localsearch.h"
+#include "../include/geneticalgorithm.h"
 #include <iostream>
+#include <cstdio>
 
 using namespace std;
 int main(){
@@ -13,18 +15,18 @@ int main(){
 		cout << "Error opening file." << endl;
 		return -1;
 	}
-	cout << "[0][0] = " << data.distance(0,0) << endl;
+
+	GeneticAlgorithm ga(data, data.n()*2, 5000, 4, 0.7, 0.01, 80);
+	LocalSearch ls(data, 80);
+
+	Solution best = ga.run();
+	printf("Initial Solution = %i\n", ga.getInitialSolution().fitness());
+	printf("Initial LSC = %i\n", ls.runAllPairChanges(ga.getInitialSolution()).fitness());
+	printf("Best Solution Found = %i \n", best.fitness());
 	ObjectiveFunction of(data);
-	PopulationCreator pc(&of, 2, data.n(), 9); 
-
-	Solution s = pc.randomPopulation()[0];
-	LocalSearch ls(data, 9);
-	cout << "Initial:  " << s.fitness() << endl;
-	s = ls.runComplete(s);
-	cout << "Final:  " << s.fitness() << endl;
-	cout << "Real:  " << of.evaluate(s) << endl;
-
+	printf("Real BSF = %i\n", of.evaluate(best));
 	//data.printOut();
 	cout << "Success!" << endl;
+	return 0;
 }
 

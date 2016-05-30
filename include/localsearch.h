@@ -17,14 +17,17 @@ private:
 	ObjectiveFunction *evaluator;
 
 	/*Variables of the random number generator*/
-	std::default_random_engine generator;
+	std::default_random_engine *generator;
 	std::uniform_int_distribution<int> rand_place;
 
 	
 public:
 	LocalSearch(DataFile data, int seed);
-	/*Finds a local minima for this solution*/
-	Solution runComplete(Solution s);
+	LocalSearch(DataFile data, std::default_random_engine *generator);
+	/*Finds a local minima for this solution changing all pairs (t,u) of places in permutation s*/
+	Solution runAllPairChanges(Solution s);
+	/*A limited local search with memory to improve the current solution*/
+	Solution runLimitedPairChanges(Solution s, int maxiterations);
 
 };
 

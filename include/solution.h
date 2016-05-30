@@ -14,7 +14,7 @@ private:
 	int fitnessf;
 
 public:
-	Solution(int nf);
+	Solution(int nf=0);
 	Solution(std::vector<int> perm);
 	std::vector<int> permutation();
 	int& operator[](int i);
