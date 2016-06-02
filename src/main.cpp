@@ -11,7 +11,7 @@ using namespace std;
 int main(){
 	DataFile data;
 
-	if(data.read("./instances/qapdata/tai17a.dat") == -1){
+	if(data.read("./instances/qapdata/bur26a.dat") == -1){
 		cout << "Error opening file." << endl;
 		return -1;
 	}

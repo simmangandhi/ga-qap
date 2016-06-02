@@ -39,15 +39,66 @@ Solution LocalSearch::runAllPairChanges(Solution s){
 	return s;
 }
 
+/*Run a limited iterated local search in solution s*/
+Solution LocalSearch::runLimitedIteratedSearch(Solution s, int maxiterations){
+	/*Maximum number of iterations of the limited pair change*/
+	int lpcmaxiter = data.n();
+	Solution best = s;
+	/*Start picking a neighbor of s*/
+	s = runLimitedPairChanges(s, lpcmaxiter);
+
+	if(s < best)
+		best = s;	
+
+	int iter = 0;
+	int u = 2;
+	
+	while(iter < maxiterations){
+		iter++;
+		s = perturbation(s, u);
+		u++;
+		if(u > 15) u = 2;
+		s = runLimitedPairChanges(s, lpcmaxiter);
+		if(s < best)
+			best = s;
+		else
+			s = best;
+	}	
+
+	return best;
+}
+
+/*Makes u pair perturbations in solution s*/
+Solution LocalSearch::perturbation(Solution s, int u){
+	int p = 0;
+	
+	while(p < u){
+		p++;
+		/*Pick two locations randomly*/
+		int t = this->rand_place(*(this->generator));
+		int v = this->rand_place(*(this->generator));	
+		/*Evaluate the exchange*/
+		int f = evaluator->evaluatePairChange(s, t, v);
+		/*Exhcange points (wheter it is better or not)*/
+		s.setFitness(f);
+		int temp = s[t];
+		s[t] = s[v];
+		s[v] = temp;
+	}
+
+	return s;
+}
+
+
 /*A limited local search with memory to improve the current solution*/
 Solution LocalSearch::runLimitedPairChanges(Solution s, int maxiterations){
-	int i=0;
+	int iter=0;
 	/*The local search memory to avoid repeating changes*/
 	std::set< std::pair<int, int> > memory;
 	/*Maximum number of tries to generate a new pair of random places*/
 	int maxtries = ((data.n()*(data.n()-1))/2);
-	while(i < maxiterations){
-		i++;
+	while(iter < maxiterations){
+		iter++;
 		int t = this->rand_place(*(this->generator));
 		int u = this->rand_place(*(this->generator));
 		int tries = 0;

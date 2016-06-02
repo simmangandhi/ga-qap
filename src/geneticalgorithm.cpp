@@ -3,7 +3,7 @@
 #include "../include/objectivefunction.h"
 #include "../include/localsearch.h"
 #include <algorithm>
-
+#include <cstdio>
 
 GeneticAlgorithm::GeneticAlgorithm(DataFile data, int popsize, int maxgenerations, int k, double pc, double pm, int seed){
 	this->data = data;
@@ -48,7 +48,7 @@ Solution GeneticAlgorithm::run(){
 		generation++;
 
 		std::vector<Solution> offspring;
-		while(offspring.size() < (unsigned int)popsize){
+		while(offspring.size() < (unsigned int)popsize*0.5){
 			int except = -1;
 			/*Tournament to select parents*/
 			Solution p1 = tournament(population, this->k, &except);
@@ -59,17 +59,13 @@ Solution GeneticAlgorithm::run(){
 			/*Evaluate c*/
 			c.setFitness(evaluator.evaluate(c));
 			
-			if(generation % 100 == 0){
-				c = ls.runAllPairChanges(c);				
-			}else{
-				c = ls.runLimitedPairChanges(c, data.n()*0.5);
-			}
+			c = ls.runLimitedIteratedSearch(c, data.n()*2);	
 
 			offspring.push_back(c);
 		}
 		/*Sorts offspring in increasing order*/
 		sort(offspring.begin(), offspring.end(), comp);
-		for(int i=0;i<popsize/2;i++){
+		for(int i=0;i<popsize*0.5;i++){
 			if(offspring[i] < population[popsize-1-i])
 				population[popsize-1-i] = offspring[i];
 		}
@@ -80,7 +76,9 @@ Solution GeneticAlgorithm::run(){
 			bestSolution = population[0];
 			this->bestSolution = bestSolution;
 			this->iterBest = generation;
+			printf("Best solution in generation %i:  %i\n", generation, bestSolution.fitness());
 		}
+		
 	}
 	return bestSolution;
 }
