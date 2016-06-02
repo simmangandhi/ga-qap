@@ -159,6 +159,26 @@ Solution GeneticAlgorithm::crossover(Solution p1, Solution p2){
 	return s;
 }	
 
+Solution GeneticAlgorithm::mutation(Solution s, int u){
+	std::vector<int> p1(u);
+	std::vector<int> p2(s.n()-u);
+
+	for(int i=0;i<s.n();i++){
+		if(i<u)
+			p1[i] = s[i];
+		else
+			p2[i-u] = s[i];
+	}
+
+	for(int i=0;i<s.n();i++){
+		if(i<s.n()-u)
+			s[i] = p2[i];
+		else
+			s[i] = p1[i-s.n()-u];
+	}
+
+	return s;	
+}
 
 Solution GeneticAlgorithm::getInitialSolution(){
 	return this->initialSolution;

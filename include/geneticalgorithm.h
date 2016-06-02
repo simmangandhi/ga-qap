@@ -38,6 +38,8 @@ private:
 	/*Tournament selection of size k, except >= 0 is a solution that can't be selected*/
 	Solution tournament(std::vector<Solution> population, int k, int *except);
 
+	Solution mutation(Solution s, int u);
+
 
 public:
 	GeneticAlgorithm(DataFile data, int popsize, int maxgenerations, int k, double pc, double pm, int seed);

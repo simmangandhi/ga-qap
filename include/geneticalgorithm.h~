@@ -44,7 +44,7 @@ public:
 	Solution run();
 	Solution getInitialSolution();
 	Solution getBestSolution();
-	Solution getIterBest();
+	int getIterBest();
 	
 
 };
