@@ -4,6 +4,7 @@
 #include "../include/objectivefunction.h"
 #include "../include/localsearch.h"
 #include "../include/geneticalgorithm.h"
+#include <time.h>
 #include <iostream>
 #include <cstdio>
 
@@ -11,12 +12,12 @@ using namespace std;
 int main(){
 	DataFile data;
 
-	if(data.read("./instances/qapdata/bur26a.dat") == -1){
+	if(data.read("./instances/qapdata/tai35a.dat") == -1){
 		cout << "Error opening file." << endl;
 		return -1;
 	}
 
-	GeneticAlgorithm ga(data, data.n()*2, 5000, 4, 0.7, 0.01, 80);
+	GeneticAlgorithm ga(data, data.n(), 5000, 4, 0.7, 0.01, 2);
 	LocalSearch ls(data, 80);
 
 	Solution best = ga.run();

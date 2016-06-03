@@ -45,7 +45,9 @@ Solution GeneticAlgorithm::run(){
 	LocalSearch ls(this->data, &this->generator);
 	int u = 1;
 	int lastmutation = 0;
-	while(generation < maxgenerations){
+	int mutation_type = 1;
+
+	while(generation < maxgenerations && bestSolution > 0){
 		generation++;
 
 		std::vector<Solution> offspring;
@@ -73,23 +75,44 @@ Solution GeneticAlgorithm::run(){
 		
 		/*Sorts population in increasing order*/
 		sort(population.begin(), population.end(), comp);
-		if(population[0] >= bestSolution && generation - lastmutation > 100 && generation - this->iterBest > 200){ //Solution converged
+		if(population[0] >= bestSolution && generation - lastmutation > 50 && generation - this->iterBest > 100 && mutation_type==1){ //Solution converged
 			for(int i=0;i<popsize;i++){
 				population[i] = mutation(population[i], u);
 				population[i].setFitness(evaluator.evaluate(population[i]));
 			}
 			printf("MUtated population with u = %i\n", u);
 			u++;
-			if(u > data.n()-2)
+			if(u > data.n()*0.5){
 				u=1;
+				mutation_type=2;
+			}
 			sort(population.begin(), population.end(), comp);
 			lastmutation = generation;
+		}else if(population[0] >= bestSolution && generation - lastmutation > 50 && generation - this->iterBest > 100 && mutation_type==2){
+			printf("Executing mutation type 2...\n");
+			for(int i=0;i<popsize;i++){
+				int r = this->rand_place(this->generator);
+				int s = this->rand_place(this->generator);
+				while(r == s)
+					r = this->rand_place(this->generator);
+
+				population[i].setFitness(evaluator.evaluatePairChange(population[i], r, s));
+				
+				int temp = population[i][r];
+				population[i][r] = population[i][s];
+				population[i][s] = temp;
+			}
+			sort(population.begin(), population.end(), comp);
+			lastmutation = generation;
+			mutation_type = 2;
 		}
+		
 
 		if(population[0] < bestSolution){
 			bestSolution = population[0];
 			this->bestSolution = bestSolution;
 			this->iterBest = generation;
+			u = 1;
 			printf("Best solution in generation %i:  %i\n", generation, bestSolution.fitness());
 		}
 	}
