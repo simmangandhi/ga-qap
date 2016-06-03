@@ -43,7 +43,8 @@ Solution GeneticAlgorithm::run(){
 
 	int generation = 0;
 	LocalSearch ls(this->data, &this->generator);
-
+	int u = 1;
+	int lastmutation = 0;
 	while(generation < maxgenerations){
 		generation++;
 
@@ -72,13 +73,25 @@ Solution GeneticAlgorithm::run(){
 		
 		/*Sorts population in increasing order*/
 		sort(population.begin(), population.end(), comp);
+		if(population[0] >= bestSolution && generation - lastmutation > 100 && generation - this->iterBest > 200){ //Solution converged
+			for(int i=0;i<popsize;i++){
+				population[i] = mutation(population[i], u);
+				population[i].setFitness(evaluator.evaluate(population[i]));
+			}
+			printf("MUtated population with u = %i\n", u);
+			u++;
+			if(u > data.n()-2)
+				u=1;
+			sort(population.begin(), population.end(), comp);
+			lastmutation = generation;
+		}
+
 		if(population[0] < bestSolution){
 			bestSolution = population[0];
 			this->bestSolution = bestSolution;
 			this->iterBest = generation;
 			printf("Best solution in generation %i:  %i\n", generation, bestSolution.fitness());
 		}
-		
 	}
 	return bestSolution;
 }
@@ -162,22 +175,22 @@ Solution GeneticAlgorithm::crossover(Solution p1, Solution p2){
 Solution GeneticAlgorithm::mutation(Solution s, int u){
 	std::vector<int> p1(u);
 	std::vector<int> p2(s.n()-u);
-
+	//printf("FIrst phase ongoing\n");
 	for(int i=0;i<s.n();i++){
 		if(i<u)
 			p1[i] = s[i];
 		else
 			p2[i-u] = s[i];
 	}
-
+	//printf("Passed 1st phase..\n");
 	for(int i=0;i<s.n();i++){
-		if(i<s.n()-u)
+		if(i<(s.n()-u))
 			s[i] = p2[i];
 		else
-			s[i] = p1[i-s.n()-u];
+			s[i] = p1[i-(s.n()-u)];
 	}
 
-	return mutation;	
+	return s;	
 }
 
 Solution GeneticAlgorithm::getInitialSolution(){
