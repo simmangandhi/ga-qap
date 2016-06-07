@@ -3,6 +3,7 @@
 
 #include "datafile.h"
 #include "solution.h"
+#include "../include/objectivefunction.h"
 #include <random>
 #include <vector>
 
@@ -39,6 +40,8 @@ private:
 	Solution tournament(std::vector<Solution> population, int k, int *except);
 
 	Solution mutation(Solution s, int u);
+
+	Solution crossoverOpt(Solution p1, Solution p2, ObjectiveFunction evaluator);
 
 
 public:

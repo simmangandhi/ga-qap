@@ -1,6 +1,5 @@
 #include "../include/geneticalgorithm.h"
 #include "../include/populationcreator.h"
-#include "../include/objectivefunction.h"
 #include "../include/localsearch.h"
 #include <algorithm>
 #include <cstdio>
@@ -43,6 +42,11 @@ Solution GeneticAlgorithm::run(){
 
 	int generation = 0;
 	LocalSearch ls(this->data, &this->generator);
+
+	for(int i=0;i<population.size();i++){
+		population[i] = ls.runAllPairChanges(population[i]);
+	}
+
 	int u = 1;
 	int lastmutation = 0;
 	int mutation_type = 1;
@@ -58,7 +62,8 @@ Solution GeneticAlgorithm::run(){
 			Solution p2 = tournament(population, this->k, &except);
 			
 			/*crossover of parents*/
-			Solution c = crossover(p1, p2);
+			Solution c = crossoverOpt(p1, p2, evaluator);
+//			Solution c = crossover(p1, p2);
 			/*Evaluate c*/
 			c.setFitness(evaluator.evaluate(c));
 			
@@ -102,7 +107,7 @@ Solution GeneticAlgorithm::run(){
 				population[i][r] = population[i][s];
 				population[i][s] = temp;
 
-				population[i] = evaluator.runAllPairChanges(population[i]);
+				population[i] = ls.runAllPairChanges(population[i]);
 			}
 			sort(population.begin(), population.end(), comp);
 			lastmutation = generation;
@@ -196,6 +201,76 @@ Solution GeneticAlgorithm::crossover(Solution p1, Solution p2){
 	Solution s(child);
 	return s;
 }	
+
+
+Solution GeneticAlgorithm::crossoverOpt(Solution p1, Solution p2, ObjectiveFunction evaluator){
+	/*probability of crossover occur*/
+	double pcs = this->prob(this->generator);
+	if(pcs > this->pc){ /*if crossover does not occur, return the best parent*/
+		if(p1 > p2) return p2;
+		else return p1;
+	}
+
+	/*The new child*/
+	std::vector<int> child(p1.n(), -1);
+	/*Vector indicating wheter a given facility was already placed or not*/
+	std::vector<bool> placed(p1.n(), false);	
+
+	/*Copy equal positions from parents into child*/
+	for(int i=0;i<p1.n();i++){
+		if(p1[i] == p2[i]){
+			child[i] = p1[i];
+			placed[p1[i]] = true;
+		}
+	}
+	
+	std::vector<int> childm = child;
+	std::vector<bool> placedm = placed;
+	Solution *best = NULL;
+
+	for(int m=0;m<data.n()*0.5;m++){
+		child = childm;
+		placed = placedm;
+		/*Assign the rest of the positions according to parents or randomly*/
+		for(int i=0;i<p1.n();i++){
+			if(child[i] == -1){
+				if(!placed[p1[i]] && !placed[p2[i]]){
+					/*If none of the parents position was already placed, choose probabilistically*/
+					double p = this->prob(this->generator);
+					if( p < 0.5  )
+						child[i] = p1[i];
+					else
+						child[i] = p2[i];
+				}else if(!placed[p1[i]]){
+					child[i] = p1[i];
+				}else if(!placed[p2[i]]){
+					child[i] = p2[i];
+				}else{
+					/*If both positions were placed, choose another randomly*/
+					int r = this->rand_place(this->generator);
+					while(placed[r])
+						r = this->rand_place(this->generator);
+					child[i] = r;
+				}
+			
+				/*Mark this place as used*/
+				placed[child[i]] = true;
+			}
+		}
+		Solution s(child);
+		s.setFitness(evaluator.evaluate(s));
+		//printf("\tChild value = %i\n", s.fitness());
+		if(best == NULL){
+			best = new Solution(child);
+		}else if(*best > s){
+			best = new Solution(child);
+		}
+	}
+
+	return *best;
+}	
+
+
 
 Solution GeneticAlgorithm::mutation(Solution s, int u){
 	std::vector<int> p1(u);

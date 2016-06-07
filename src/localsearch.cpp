@@ -22,6 +22,7 @@ LocalSearch::LocalSearch(DataFile data, std::default_random_engine *generator){
 
 /*Finds a local minima for this solution changing all pairs (t,u) of places in permutation s*/
 Solution LocalSearch::runAllPairChanges(Solution s){
+
 	for(int t=0;t<s.n();t++){
 		for(int u=t+1;u<s.n();u++){
 			int f = evaluator->evaluatePairChange(s, t, u);
@@ -31,8 +32,8 @@ Solution LocalSearch::runAllPairChanges(Solution s){
 				s[t] = s[u];
 				s[u] = temp;
 				s.setFitness(f);
-				t=0;
-				break;
+				//t=0;
+				//break;
 			}
 		}
 	}
@@ -42,7 +43,7 @@ Solution LocalSearch::runAllPairChanges(Solution s){
 /*Run a limited iterated local search in solution s*/
 Solution LocalSearch::runLimitedIteratedSearch(Solution s, int maxiterations){
 	/*Maximum number of iterations of the limited pair change*/
-	int lpcmaxiter = data.n();
+	int lpcmaxiter = maxiterations;
 	Solution best = s;
 	/*Start picking a neighbor of s*/
 	//s = runLimitedPairChanges(s, lpcmaxiter);
