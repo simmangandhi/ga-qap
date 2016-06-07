@@ -45,8 +45,8 @@ Solution LocalSearch::runLimitedIteratedSearch(Solution s, int maxiterations){
 	int lpcmaxiter = data.n();
 	Solution best = s;
 	/*Start picking a neighbor of s*/
-	s = runLimitedPairChanges(s, lpcmaxiter);
-
+	//s = runLimitedPairChanges(s, lpcmaxiter);
+	s = runAllPairChanges(s);
 	if(s < best)
 		best = s;	
 
@@ -57,8 +57,9 @@ Solution LocalSearch::runLimitedIteratedSearch(Solution s, int maxiterations){
 		iter++;
 		s = perturbation(s, u);
 		u++;
-		if(u > 15) u = 2;
-		s = runLimitedPairChanges(s, lpcmaxiter);
+		if(u > data.n()) u = 2;
+		//s = runLimitedPairChanges(s, lpcmaxiter);
+		s = runAllPairChanges(s);
 		if(s < best)
 			best = s;
 		else
@@ -77,6 +78,9 @@ Solution LocalSearch::perturbation(Solution s, int u){
 		/*Pick two locations randomly*/
 		int t = this->rand_place(*(this->generator));
 		int v = this->rand_place(*(this->generator));	
+		while(v == t)
+			v = this->rand_place(*(this->generator));	
+
 		/*Evaluate the exchange*/
 		int f = evaluator->evaluatePairChange(s, t, v);
 		/*Exhcange points (wheter it is better or not)*/

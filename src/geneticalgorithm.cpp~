@@ -62,7 +62,7 @@ Solution GeneticAlgorithm::run(){
 			/*Evaluate c*/
 			c.setFitness(evaluator.evaluate(c));
 			
-			c = ls.runLimitedIteratedSearch(c, data.n()*2);	
+			c = ls.runLimitedIteratedSearch(c, data.n());	
 
 			offspring.push_back(c);
 		}
@@ -75,7 +75,7 @@ Solution GeneticAlgorithm::run(){
 		
 		/*Sorts population in increasing order*/
 		sort(population.begin(), population.end(), comp);
-		if(population[0] >= bestSolution && generation - lastmutation > 50 && generation - this->iterBest > 100 && mutation_type==1){ //Solution converged
+		if(population[0] >= bestSolution && generation - lastmutation > 100 && generation - this->iterBest > 200 && mutation_type==1){ //Solution converged
 			for(int i=0;i<popsize;i++){
 				population[i] = mutation(population[i], u);
 				population[i].setFitness(evaluator.evaluate(population[i]));
@@ -88,7 +88,7 @@ Solution GeneticAlgorithm::run(){
 			}
 			sort(population.begin(), population.end(), comp);
 			lastmutation = generation;
-		}else if(population[0] >= bestSolution && generation - lastmutation > 50 && generation - this->iterBest > 100 && mutation_type==2){
+		}else if(population[0] >= bestSolution && generation - lastmutation > 100 && generation - this->iterBest > 200 && mutation_type==2){
 			printf("Executing mutation type 2...\n");
 			for(int i=0;i<popsize;i++){
 				int r = this->rand_place(this->generator);
@@ -101,10 +101,12 @@ Solution GeneticAlgorithm::run(){
 				int temp = population[i][r];
 				population[i][r] = population[i][s];
 				population[i][s] = temp;
+
+				population[i] = evaluator.runAllPairChanges(population[i]);
 			}
 			sort(population.begin(), population.end(), comp);
 			lastmutation = generation;
-			mutation_type = 2;
+			mutation_type = 1;
 		}
 		
 
@@ -171,7 +173,7 @@ Solution GeneticAlgorithm::crossover(Solution p1, Solution p2){
 			if(!placed[p1[i]] && !placed[p2[i]]){
 				/*If none of the parents position was already placed, choose probabilistically*/
 				double p = this->prob(this->generator);
-				if( p > 0.5 )
+				if( p < 0.5  )
 					child[i] = p1[i];
 				else
 					child[i] = p2[i];

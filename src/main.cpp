@@ -17,7 +17,7 @@ int main(){
 		return -1;
 	}
 
-	GeneticAlgorithm ga(data, data.n(), 5000, 4, 0.7, 0.01, time(NULL));
+	GeneticAlgorithm ga(data, data.n(), 10000, 4, 0.9, 0.01,1);
 	LocalSearch ls(data, 80);
 
 	Solution best = ga.run();
