@@ -52,21 +52,24 @@ Solution LocalSearch::runLimitedIteratedSearch(Solution s, int maxiterations){
 		best = s;	
 
 	int iter = 0;
+    int bi = 0;
 	int u = 2;
 	
-	while(iter < maxiterations){
+	while(iter < maxiterations*0.2){
 		iter++;
 		s = perturbation(s, u);
 		u++;
 		if(u > data.n()) u = 2;
 		//s = runLimitedPairChanges(s, lpcmaxiter);
 		s = runAllPairChanges(s);
-		if(s < best)
+		if(s < best){
 			best = s;
+            bi = iter;
+        }
 		else
 			s = best;
 	}	
-
+    //printf("Found best in iteration %i\n", bi);
 	return best;
 }
 

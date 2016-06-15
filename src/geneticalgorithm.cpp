@@ -41,13 +41,13 @@ Solution GeneticAlgorithm::run(){
 	/*Sorts population in increasing order*/
 	sort(population.begin(), population.end(), comp);
 	Solution bestSolution = population[0];
+    int generation = 0;
 
+
+    printf("Best solution in generation %i:  %i\n", generation, bestSolution.fitness());
 	this->bestSolution = bestSolution;
 	this->initialSolution = bestSolution;
 	this->iterBest = 0;
-
-	int generation = 0;
-	
 
 	int u = 1;
 	int lastmutation = 0;
@@ -65,7 +65,7 @@ Solution GeneticAlgorithm::run(){
 			
 			/*crossover of parents*/
 			Solution c = crossoverOpt(p1, p2, evaluator);
-//			Solution c = crossover(p1, p2);
+
 			/*Evaluate c*/
 			c.setFitness(evaluator.evaluate(c));
 			
@@ -75,7 +75,7 @@ Solution GeneticAlgorithm::run(){
 		}
 		/*Sorts offspring in increasing order*/
 		sort(offspring.begin(), offspring.end(), comp);
-		for(int i=0;i<popsize*0.5;i++){
+		for(unsigned int i=0;i<offspring.size();i++){
 			if(offspring[i] < population[popsize-1-i])
 				population[popsize-1-i] = offspring[i];
 		}
@@ -98,17 +98,18 @@ Solution GeneticAlgorithm::run(){
 		}else if(population[0] >= bestSolution && generation - lastmutation > 100 && generation - this->iterBest > 200 && mutation_type==2){
 			printf("Executing mutation type 2...\n");
 			for(int i=0;i<popsize;i++){
-				int r = this->rand_place(this->generator);
-				int s = this->rand_place(this->generator);
-				while(r == s)
-					r = this->rand_place(this->generator);
+				for(int j=0;j<data.n()*0.2;j++){
+					int r = this->rand_place(this->generator);
+					int s = this->rand_place(this->generator);
+					while(r == s)
+						r = this->rand_place(this->generator);
 
-				population[i].setFitness(evaluator.evaluatePairChange(population[i], r, s));
+					population[i].setFitness(evaluator.evaluatePairChange(population[i], r, s));
 				
-				int temp = population[i][r];
-				population[i][r] = population[i][s];
-				population[i][s] = temp;
-
+					int temp = population[i][r];
+					population[i][r] = population[i][s];
+					population[i][s] = temp;
+				}
 				population[i] = ls.runAllPairChanges(population[i]);
 			}
 			sort(population.begin(), population.end(), comp);
@@ -229,8 +230,8 @@ Solution GeneticAlgorithm::crossoverOpt(Solution p1, Solution p2, ObjectiveFunct
 	std::vector<int> childm = child;
 	std::vector<bool> placedm = placed;
 	Solution *best = NULL;
-
-	for(int m=0;m<data.n()*0.5;m++){
+    int lim = data.n()*0.2;
+	for(int m=0;m<lim;m++){
 		child = childm;
 		placed = placedm;
 		/*Assign the rest of the positions according to parents or randomly*/

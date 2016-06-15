@@ -12,12 +12,12 @@ using namespace std;
 int main(){
 	DataFile data;
 
-	if(data.read("./instances/qapdata/ste36c.dat") == -1){
+	if(data.read("./instances/qapdata/wil100.dat") == -1){
 		cout << "Error opening file." << endl;
 		return -1;
 	}
 
-	GeneticAlgorithm ga(data, data.n()*0.5, 100000, 4, 0.9, 0.01,1);
+	GeneticAlgorithm ga(data, data.n()*0.5, 100000, 4, 0.9, 0.01,2);
 	LocalSearch ls(data, 80);
 
 	Solution best = ga.run();
