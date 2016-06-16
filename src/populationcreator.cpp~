@@ -1,11 +1,11 @@
 #include "../include/populationcreator.h"
 
 /*Constructor*/
-PopulationCreator::PopulationCreator(ObjectiveFunction evaluator, int popSize, int n, int seed){
+PopulationCreator::PopulationCreator(ObjectiveFunction *evaluator, int popSize, int n, std::default_random_engine *generator){
 	this->popSize = popSize;
 	this->nf = n;
-	this->evaluator = &evaluator;
-	this->generator = std::default_random_engine(seed);
+	this->evaluator = evaluator;
+	this->generator = generator;
 	this->rand = std::uniform_int_distribution<int>(0, n-1);
 }
 

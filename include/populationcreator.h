@@ -15,12 +15,12 @@ private:
 	/*Evaluator of the population*/
 	ObjectiveFunction *evaluator;	
 	/*Variables of the random number generator*/
-	std::default_random_engine generator;
+	std::default_random_engine *generator;
 	std::uniform_int_distribution<int> rand;
 
 public:
 	/*Constructor*/
-	PopulationCreator(ObjectiveFunction *evaluator, int popSize, int n, int seed);
+	PopulationCreator(ObjectiveFunction *evaluator, int popSize, int n, std::default_random_engine *generator);
 	/*Random population creator*/
 	std::vector<Solution> randomPopulation();	
 

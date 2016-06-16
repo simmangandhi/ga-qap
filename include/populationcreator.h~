@@ -14,8 +14,6 @@ private:
 	int nf;
 	/*Evaluator of the population*/
 	ObjectiveFunction *evaluator;	
-
-
 	/*Variables of the random number generator*/
 	std::default_random_engine generator;
 	std::uniform_int_distribution<int> rand;
