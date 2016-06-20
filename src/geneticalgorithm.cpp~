@@ -98,7 +98,7 @@ Solution GeneticAlgorithm::run(){
 		if(population[0] >= bestSolution && generation - lastmutation > 100 && generation - this->iterBest > 200 && mutation_type==1){ 
 			/*First try the shift mutation approach*/
 			for(int i=0;i<popsize;i++){
-				population[i] = mutation(population[i], u);
+				population[i] = shiftMutation(population[i], u);
 				population[i].setFitness(evaluator.evaluate(population[i]));
 			}
 			if(prints)

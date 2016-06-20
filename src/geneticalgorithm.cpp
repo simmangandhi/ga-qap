@@ -61,7 +61,7 @@ Solution GeneticAlgorithm::run(){
     int generation = 0;
 	
 	/*GA main loop*/
-	while(generation < maxgenerations){
+	while(generation < maxgenerations && data.sol != bestSolution.fitness()){
 		generation++;
 
 		std::vector<Solution> offspring;

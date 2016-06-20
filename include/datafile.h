@@ -13,6 +13,7 @@ private:
 	/*Number of facilities to install*/
 	int nf;
 
+
 public:
 	DataFile();
 	int read(std::string filename);
@@ -21,6 +22,8 @@ public:
 	int n();
 	int writeSolution(std::string filename, Solution s);
 	void printOut();
+
+	int sol;
 
 
 };

@@ -19,8 +19,8 @@ public:
 	int flow(int i, int j);
 	int distance(int i, int j);
 	int n();
-	int writeSolution();
-	void printOut(std::string filename, Solution s);
+	int writeSolution(std::string filename, Solution s);
+	void printOut();
 
 
 };

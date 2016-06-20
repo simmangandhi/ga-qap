@@ -25,25 +25,44 @@ void readParameter(int argc, char **argv);
 int main(int argc, char **argv){
 	/*Read input parameters*/
 	readParameter(argc, argv);
-	DataFile data;
-	
+	DataFile data;	
+	string fname = "./instances/qapdata/"+string(input_file)+".dat";
+	string sname = "./instances/qapsoln/"+string(input_file)+".sln";
+	FILE *fs = fopen(sname.c_str(), "rt");
+	int temp;
+	if(fs == NULL)
+		printf("NULL file\n");
+	else {
+		fscanf(fs, "%i %i", &temp, &data.sol);
+		fclose(fs);
+	}
 	//"./instances/qapdata/wil50.dat"
 
-	if(data.read(input_file) == -1){
-		printf("Error operning file \'%s\'.\n", input_file);
+	if(data.read(fname.c_str()) == -1){
+		printf("Error opening file \'%s\'.\n", input_file);
 		return -1;
 	}
 	
 	if(pop_size < 0)
 		pop_size = data.n()*0.5;
+	seed = time(NULL);
+
+	time_t startTtime;
+	time_t endTime;
+
+	time(&startTtime); /*Get time of start*/
 
 	GeneticAlgorithm ga(data, pop_size, max_iterations, tournament_size, cross_p, seed, prints);
 
 	Solution best = ga.run();
+
+	time(&endTime); /*Time of end*/
 	
 	if(prints){
 		printf("Initial Solution = %i\n", ga.getInitialSolution().fitness());
 		printf("Best Solution Found = %i \n", best.fitness());
+		printf("Iterations = %i \n", ga.getIterBest());
+		printf("Time = %.2f \n", difftime(endTime, startTtime));
 	}
 	
 	if(output_file != NULL){
@@ -54,8 +73,9 @@ int main(int argc, char **argv){
 		if(prints)
 			printf("Solution saved to \'%s\'.\n", output_file);
 	}
-
-	printf("Success!\n");
+	
+	if(prints)
+		printf("Success!\n");
 
 	return 0;
 }
