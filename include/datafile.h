@@ -23,8 +23,6 @@ public:
 	int writeSolution(std::string filename, Solution s);
 	void printOut();
 
-	int sol;
-
 
 };
 

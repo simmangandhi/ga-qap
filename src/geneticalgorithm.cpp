@@ -61,7 +61,7 @@ Solution GeneticAlgorithm::run(){
     int generation = 0;
 	
 	/*GA main loop*/
-	while(generation < maxgenerations && data.sol != bestSolution.fitness()){
+	while(generation < maxgenerations){
 		generation++;
 
 		std::vector<Solution> offspring;
@@ -105,7 +105,7 @@ Solution GeneticAlgorithm::run(){
 				printf("Mutated population with u = %i\n", u);
 
 			u++;
-			if(u > data.n()*0.5){
+			if(u > data.n()){
 				/*In case the shift mutation has not done the job, go to the second type*/
 				u=1;
 				mutation_type=2;

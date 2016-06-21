@@ -25,21 +25,10 @@ void readParameter(int argc, char **argv);
 int main(int argc, char **argv){
 	/*Read input parameters*/
 	readParameter(argc, argv);
-	DataFile data;	
-	string fname = "./instances/qapdata/"+string(input_file)+".dat";
-	string sname = "./instances/qapsoln/"+string(input_file)+".sln";
-	FILE *fs = fopen(sname.c_str(), "rt");
-	int temp;
-
-	if(fs == NULL)
-		printf("NULL file\n");
-	else {
-		fscanf(fs, "%i %i", &temp, &data.sol);
-		fclose(fs);
-	}
 	//"./instances/qapdata/wil50.dat"
+	DataFile data;
 
-	if(data.read(fname.c_str()) == -1){
+	if(data.read(input_file) == -1){
 		printf("Error opening file \'%s\'.\n", input_file);
 		return -1;
 	}
@@ -55,8 +44,8 @@ int main(int argc, char **argv){
 
 	time(&startTtime); /*Get time of start*/
 
+	//create and run GA
 	GeneticAlgorithm ga(data, pop_size, max_iterations, tournament_size, cross_p, seed, prints);
-
 	Solution best = ga.run();
 
 	time(&endTime); /*Time of end*/
